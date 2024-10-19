@@ -2,7 +2,9 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from datetime import datetime
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, classification_report
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -50,4 +52,37 @@ sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt='.2f')
 plt.title('Correlation Heatmap')
 plt.show()
 
-###############################################################
+############################# Random Forest ##################################
+print("############################# Random Forest ##################################")
+
+X = df[['Accelerometer_x', 'Accelerometer_y', 'Accelerometer_z', 'Gyroscope_x', 'Gyroscope_y', 'Gyroscope_z']]
+y = df['Label']
+
+# Split the data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train the model
+model = RandomForestClassifier(n_estimators=1000, random_state=10)
+model.fit(X_train, y_train)
+
+# Predict and evaluate
+y_pred = model.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+print(f'Accuracy pierwsza próba: {accuracy:.2f}')
+print(classification_report(y_test, y_pred))
+
+X = df[['Accelerometer_x', 'Accelerometer_y', 'Accelerometer_z', 'Gyroscope_x', 'Gyroscope_y', 'Gyroscope_z']]
+y = df['Label']
+
+# Split the data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train the model
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+
+# Predict and evaluate
+y_pred = model.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+print(f'Accuracy: {accuracy:.2f}')
+print(classification_report(y_test, y_pred))
