@@ -8,6 +8,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report
 import warnings
+from sklearn.neighbors import KNeighborsClassifier
 warnings.filterwarnings('ignore')
 
 file_path = '01_Data_Processed.csv'
@@ -76,8 +77,6 @@ print(classification_report(y_test, y_pred))
 X = df[['Accelerometer_x', 'Accelerometer_y', 'Accelerometer_z', 'Gyroscope_x', 'Gyroscope_y', 'Gyroscope_z']]
 y = df['Label']
 
-# Split the data
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Train the model
 Random_forest_model = RandomForestClassifier(n_estimators=100, random_state=42)
@@ -90,12 +89,36 @@ print(f'Accuracy: {accuracy:.2f}')
 print(classification_report(y_test, y_pred))
 
 print("############################# LOGISTIC REGRESION ##################################")
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size= 0.2, random_state = 42)
 
-Logistic_regreation_model = LogisticRegression(multi_class='ovr', solver='liblinear')
+Logistic_regreation_model = LogisticRegression()
 Logistic_regreation_model.fit(X_train, y_train)
 
 y_pred = Logistic_regreation_model.predict(X_test)
-accuracy = np.mean(y_pred == y_test)
-print("Accuracy:", accuracy)
+accuracy = accuracy_score(y_test, y_pred)
+print(f'Accuracy: {accuracy:.2f}')
+print(classification_report(y_test, y_pred))
+
+
+Logistic_regreation_model = LogisticRegression(multi_class='ovr', solver='lbfgs', random_state=100)
+Logistic_regreation_model.fit(X_train, y_train)
+
+y_pred = Logistic_regreation_model.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+print(f'Accuracy: {accuracy:.2f}')
+print(classification_report(y_test, y_pred))
+
+print("############################# KNN ##################################")
+
+KNN_model = KNeighborsClassifier()
+KNN_model.fit(X_train, y_train)
+y_pred = KNN_model.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+print(f'Accuracy: {accuracy:.2f}')
+print(classification_report(y_test, y_pred))
+
+KNN_model = KNeighborsClassifier()
+KNN_model.fit(X_train, y_train)
+y_pred = KNN_model.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+print(f'Accuracy: {accuracy:.2f}')
 print(classification_report(y_test, y_pred))
