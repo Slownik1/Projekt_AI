@@ -35,8 +35,19 @@ sns.histplot(df['Category'], bins=50, ax=axes[2], color='b').set_title('Category
 plt.tight_layout()
 plt.show()
 
-plt.hist(df['Set'], bins=50, color='r')
+plt.hist(df['Set'], bins=50, color='b')
 plt.title("Set")
 plt.show()
 
-#######################################################################################
+#############################CORELATION MATRIX##################################
+
+numeric_df = df.select_dtypes(include=[np.number])
+correlation_matrix = numeric_df.corr()
+
+# Plotting the heatmap
+plt.figure(figsize=(10, 8))
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt='.2f')
+plt.title('Correlation Heatmap')
+plt.show()
+
+###############################################################
