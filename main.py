@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from sklearn import metrics
+from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report
@@ -62,11 +64,11 @@ y = df['Label']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Train the model
-model = RandomForestClassifier(n_estimators=1000, random_state=10)
-model.fit(X_train, y_train)
+Random_forest_model = RandomForestClassifier(n_estimators=10, random_state=10)
+Random_forest_model.fit(X_train, y_train)
 
 # Predict and evaluate
-y_pred = model.predict(X_test)
+y_pred = Random_forest_model.predict(X_test)
 accuracy = accuracy_score(y_test, y_pred)
 print(f'Accuracy pierwsza próba: {accuracy:.2f}')
 print(classification_report(y_test, y_pred))
@@ -78,11 +80,22 @@ y = df['Label']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Train the model
-model = RandomForestClassifier(n_estimators=100, random_state=42)
-model.fit(X_train, y_train)
+Random_forest_model = RandomForestClassifier(n_estimators=100, random_state=42)
+Random_forest_model.fit(X_train, y_train)
 
 # Predict and evaluate
-y_pred = model.predict(X_test)
+y_pred = Random_forest_model.predict(X_test)
 accuracy = accuracy_score(y_test, y_pred)
 print(f'Accuracy: {accuracy:.2f}')
+print(classification_report(y_test, y_pred))
+
+print("############################# LOGISTIC REGRESION ##################################")
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size= 0.2, random_state = 42)
+
+Logistic_regreation_model = LogisticRegression(multi_class='ovr', solver='liblinear')
+Logistic_regreation_model.fit(X_train, y_train)
+
+y_pred = Logistic_regreation_model.predict(X_test)
+accuracy = np.mean(y_pred == y_test)
+print("Accuracy:", accuracy)
 print(classification_report(y_test, y_pred))
