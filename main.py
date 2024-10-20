@@ -116,7 +116,7 @@ accuracy = accuracy_score(y_test, y_pred)
 print(f'Accuracy: {accuracy:.2f}')
 print(classification_report(y_test, y_pred))
 
-KNN_model = KNeighborsClassifier()
+KNN_model = KNeighborsClassifier(n_neighbors=1)
 KNN_model.fit(X_train, y_train)
 y_pred = KNN_model.predict(X_test)
 accuracy = accuracy_score(y_test, y_pred)
