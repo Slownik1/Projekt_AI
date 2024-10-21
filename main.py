@@ -140,6 +140,36 @@ disp.plot()
 plt.title('Confusion Matrix (Random Forest n_estimators=100)')
 plt.show()
 
+# ROC Curve for Multiclass (Random Forest with n_estimators=100)
+y_test_bin = label_binarize(y_test, classes=np.unique(y_test))
+n_classes = y_test_bin.shape[1]
+
+# Predictions and probability estimates
+y_prob = Random_forest_model.predict_proba(X_test)
+
+# Compute ROC curve and ROC area for each class
+fpr = dict()
+tpr = dict()
+roc_auc = dict()
+
+for i in range(n_classes):
+    fpr[i], tpr[i], _ = roc_curve(y_test_bin[:, i], y_prob[:, i])
+    roc_auc[i] = auc(fpr[i], tpr[i])
+
+# Plot all ROC curves for the Random Forest model with n_estimators=100
+plt.figure()
+for i in range(n_classes):
+    plt.plot(fpr[i], tpr[i], label=f'Class {i} ROC curve (area = {roc_auc[i]:.2f})')
+
+plt.plot([0, 1], [0, 1], 'k--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver Operating Characteristic (ROC) - Random Forest n_estimators=100')
+plt.legend(loc="lower right")
+plt.show()
+
 # Cross-validation for n_estimators=100
 scores = cross_val_score(Random_forest_model, X, y, cv=cv, scoring='accuracy')
 print(f'Cross-validation scores (Random Forest n_estimators=100): {scores}')
@@ -216,6 +246,32 @@ cm_ovr = confusion_matrix(y_test, y_pred_ovr)
 disp_ovr = ConfusionMatrixDisplay(confusion_matrix=cm_ovr)
 disp_ovr.plot()
 plt.title('Confusion Matrix (Logistic Regression OVR)')
+plt.show()
+
+# ROC Curve for Multiclass (Logistic Regression OVR)
+y_prob_ovr = Logistic_regression_model_ovr.predict_proba(X_test)
+
+# Compute ROC curve and ROC area for each class
+fpr_ovr = dict()
+tpr_ovr = dict()
+roc_auc_ovr = dict()
+
+for i in range(n_classes):
+    fpr_ovr[i], tpr_ovr[i], _ = roc_curve(y_test_bin[:, i], y_prob_ovr[:, i])
+    roc_auc_ovr[i] = auc(fpr_ovr[i], tpr_ovr[i])
+
+# Plot all ROC curves for the Logistic Regression OVR model
+plt.figure()
+for i in range(n_classes):
+    plt.plot(fpr_ovr[i], tpr_ovr[i], label=f'Class {i} ROC curve (area = {roc_auc_ovr[i]:.2f})')
+
+plt.plot([0, 1], [0, 1], 'k--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver Operating Characteristic (ROC) - Logistic Regression OVR')
+plt.legend(loc="lower right")
 plt.show()
 
 # Cross-validation for OVR
@@ -300,6 +356,32 @@ cm = confusion_matrix(y_test, y_pred)
 disp = ConfusionMatrixDisplay(confusion_matrix=cm)
 disp.plot()
 plt.title('Confusion Matrix (KNN n_neighbors=1)')
+plt.show()
+
+# ROC Curve for Multiclass (KNN with n_neighbors=1)
+y_prob = KNN_model.predict_proba(X_test)
+
+# Compute ROC curve and ROC area for each class
+fpr = dict()
+tpr = dict()
+roc_auc = dict()
+
+for i in range(n_classes):
+    fpr[i], tpr[i], _ = roc_curve(y_test_bin[:, i], y_prob[:, i])
+    roc_auc[i] = auc(fpr[i], tpr[i])
+
+# Plot all ROC curves for the KNN model with n_neighbors=1
+plt.figure()
+for i in range(n_classes):
+    plt.plot(fpr[i], tpr[i], label=f'Class {i} ROC curve (area = {roc_auc[i]:.2f})')
+
+plt.plot([0, 1], [0, 1], 'k--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver Operating Characteristic (ROC) - KNN n_neighbors=1')
+plt.legend(loc="lower right")
 plt.show()
 
 # Cross-validation for n_neighbors=1
