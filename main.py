@@ -6,8 +6,8 @@ import pandas as pd
 import seaborn as sns
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, ConfusionMatrixDisplay, roc_curve, \
-    auc
+from sklearn.metrics import (accuracy_score, classification_report,
+                             confusion_matrix, ConfusionMatrixDisplay, roc_curve, auc)
 from sklearn.model_selection import StratifiedKFold
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import train_test_split
@@ -23,7 +23,7 @@ print(df.head())
 
 df['epoch (ms)'] = pd.to_datetime(df['epoch (ms)'], errors='coerce')
 print(df.head())
-################################## PLOTING ALL VALUES ##################################
+# ============================== Plotting all values ==============================
 
 fig, axes = plt.subplots(1, 3, figsize=(18, 5))
 sns.histplot(df['Accelerometer_x'], bins=50, ax=axes[0], color='r').set_title('Accelerometer X')
@@ -50,7 +50,7 @@ plt.hist(df['Set'], bins=50, color='b')
 plt.title("Set")
 plt.show()
 
-#############################CORELATION MATRIX##################################
+# ============================== CORELATION MATRIX ==============================
 
 numeric_df = df.select_dtypes(include=[np.number])
 correlation_matrix = numeric_df.corr()
