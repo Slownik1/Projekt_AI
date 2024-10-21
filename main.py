@@ -1,15 +1,17 @@
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-from sklearn import metrics
-from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.metrics import accuracy_score, classification_report
 import warnings
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report
+from sklearn.model_selection import cross_val_score, StratifiedKFold
+from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+
 warnings.filterwarnings('ignore')
 
 file_path = '01_Data_Processed.csv'
@@ -74,9 +76,14 @@ accuracy = accuracy_score(y_test, y_pred)
 print(f'Accuracy pierwsza próba: {accuracy:.2f}')
 print(classification_report(y_test, y_pred))
 
+# Cross-validation
+cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+scores = cross_val_score(Random_forest_model, X, y, cv=cv, scoring='accuracy')
+print(f'Cross-validation scores (Random Forest): {scores}')
+print(f'Srednia dokladnosc cross-validation: {np.mean(scores):.2f}')
+
 X = df[['Accelerometer_x', 'Accelerometer_y', 'Accelerometer_z', 'Gyroscope_x', 'Gyroscope_y', 'Gyroscope_z']]
 y = df['Label']
-
 
 # Train the model
 Random_forest_model = RandomForestClassifier(n_estimators=100, random_state=42)
@@ -88,6 +95,11 @@ accuracy = accuracy_score(y_test, y_pred)
 print(f'Accuracy: {accuracy:.2f}')
 print(classification_report(y_test, y_pred))
 
+# Cross-validation
+scores = cross_val_score(Random_forest_model, X, y, cv=cv, scoring='accuracy')
+print(f'Cross-validation scores (Random Forest n_estimators=100): {scores}')
+print(f'Srednia dokladnosc cross-validation: {np.mean(scores):.2f}')
+
 print("############################# LOGISTIC REGRESION ##################################")
 
 Logistic_regreation_model = LogisticRegression()
@@ -98,6 +110,10 @@ accuracy = accuracy_score(y_test, y_pred)
 print(f'Accuracy: {accuracy:.2f}')
 print(classification_report(y_test, y_pred))
 
+# Cross-validation
+scores = cross_val_score(Logistic_regreation_model, X, y, cv=cv, scoring='accuracy')
+print(f'Cross-validation scores (Logistic Regression): {scores}')
+print(f'Srednia dokladnosc cross-validation: {np.mean(scores):.2f}')
 
 Logistic_regreation_model = LogisticRegression(multi_class='ovr', solver='lbfgs', random_state=100)
 Logistic_regreation_model.fit(X_train, y_train)
@@ -106,6 +122,11 @@ y_pred = Logistic_regreation_model.predict(X_test)
 accuracy = accuracy_score(y_test, y_pred)
 print(f'Accuracy: {accuracy:.2f}')
 print(classification_report(y_test, y_pred))
+
+# Cross-validation
+scores = cross_val_score(Logistic_regreation_model, X, y, cv=cv, scoring='accuracy')
+print(f'Cross-validation scores (Logistic Regression ovr): {scores}')
+print(f'Srednia dokladnosc cross-validation: {np.mean(scores):.2f}')
 
 print("############################# KNN ##################################")
 
@@ -116,12 +137,22 @@ accuracy = accuracy_score(y_test, y_pred)
 print(f'Accuracy: {accuracy:.2f}')
 print(classification_report(y_test, y_pred))
 
+# Cross-validation
+scores = cross_val_score(KNN_model, X, y, cv=cv, scoring='accuracy')
+print(f'Cross-validation scores (KNN): {scores}')
+print(f'Srednia dokladnosc cross-validation: {np.mean(scores):.2f}')
+
 KNN_model = KNeighborsClassifier(n_neighbors=1)
 KNN_model.fit(X_train, y_train)
 y_pred = KNN_model.predict(X_test)
 accuracy = accuracy_score(y_test, y_pred)
 print(f'Accuracy: {accuracy:.2f}')
 print(classification_report(y_test, y_pred))
+
+# Cross-validation
+scores = cross_val_score(KNN_model, X, y, cv=cv, scoring='accuracy')
+print(f'Cross-validation scores (KNN n_neighbors=1): {scores}')
+print(f'Srednia dokladnosc cross-validation: {np.mean(scores):.2f}')
 
 print("############################# Decision Tree Classifier ##################################")
 
@@ -132,6 +163,11 @@ accuracy = accuracy_score(y_test, y_pred)
 print(f'Accuracy: {accuracy:.2f}')
 print(classification_report(y_test, y_pred))
 
+# Cross-validation
+scores = cross_val_score(Decision_tree, X, y, cv=cv, scoring='accuracy')
+print(f'Cross-validation scores (Decision Tree max_depth=1): {scores}')
+print(f'Srednia dokladnosc cross-validation: {np.mean(scores):.2f}')
+
 Decision_tree = DecisionTreeClassifier(max_depth=20, random_state=42, min_samples_split=5)
 Decision_tree.fit(X_train, y_train)
 y_pred = Decision_tree.predict(X_test)
@@ -139,6 +175,7 @@ accuracy = accuracy_score(y_test, y_pred)
 print(f'Accuracy: {accuracy:.2f}')
 print(classification_report(y_test, y_pred))
 
-
-
-
+# Cross-validation
+scores = cross_val_score(Decision_tree, X, y, cv=cv, scoring='accuracy')
+print(f'Cross-validation scores (Decision Tree max_depth=20): {scores}')
+print(f'Srednia dokladnosc cross-validation: {np.mean(scores):.2f}')
